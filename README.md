@@ -18,7 +18,7 @@ The heart of Origins is a specialized Long Short-Term Memory (LSTM) network desi
 ### 1. The Nuclear Loss Function
 Standard Mean Squared Error (MSE) treats a Magnitude 5.0 earthquake as simply "twice" a Magnitude 2.5. This causes models to be "lazy" and predict "Safe" to minimize average error.
 
-Origins introduces a weighted loss function where the penalty explodes exponentially:
+Origin Seismic Intelligence Engine introduces a weighted loss function where the penalty explodes exponentially:
 $$L = (y_{pred} - y_{true})^2 \times (y_{true})^4$$
 
 * **Result:** Missing an $M5.0$ quake is **625x** more expensive than missing an $M1.0$ tremor.
