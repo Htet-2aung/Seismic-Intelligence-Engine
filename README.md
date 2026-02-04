@@ -53,59 +53,9 @@ The model is tuned for **Safety-Critical Systems** (Nuclear Plants, High-Speed R
 * **Golden Threshold:** $M \ge 4.90$
 
 ---
-
-graph TD
-    %% 1. Data Ingestion
-    USGS[📡 USGS Satellite Feed<br/>(Last 30 Days)] -->|JSON| Fetch[get_live_data()]
-    Fetch -->|Parse & Sort| GlobalData[(Global DataFrame<br/>1600+ Events)]
-
-    %% 2. The Grid Mind Split
-    GlobalData -->|Loop| Zones{Zone Iterator}
-    
-    subgraph "Grid Monitor Logic (Repeated for Tokyo, LA, Jakarta)"
-        Zones -->|Lat/Lon Filter| LocalData[Local Zone Data]
-        
-        %% Safety Check
-        LocalData --> Check{Count >= 50?}
-        Check -- No --> Abort[⚪ REPORT: Insufficient Data]
-        
-        %% Physics Engine
-        Check -- Yes --> Physics[Feature Engineering]
-        Physics -->|Calc| Energy[Seismic Energy]
-        Physics -->|Calc| BVal[b-value Trend]
-        
-        %% The Time Dilation Fix (Critical)
-        Physics --> TimeCheck{Is Zone Global?}
-        TimeCheck -- Yes (Global) --> RealTime[Use Real Time Diff]
-        TimeCheck -- No (Local) --> FixedTime[⚡ TIME PATCH<br/>Override Time_Diff = 300s]
-        
-        %% Normalization
-        RealTime --> Scaler[Scaler & Clipping]
-        FixedTime --> Scaler
-        Scaler --> Tensor[Input Tensor (1, 50, 5)]
-        
-        %% The Brain
-        Tensor --> Model[[🧠 Nuclear LSTM Model]]
-        Model -->|Raw Score| Decoder[Inverse Transform]
-    end
-    
-    %% 3. Output Decision
-    Decoder --> Result{Predicted Mag}
-    Result -- M < 4.0 --> Safe[🟢 Safe]
-    Result -- M 4.0 - 4.9 --> Elevated[⚠️ Elevated]
-    Result -- M >= 4.9 --> Danger[🚨 DANGER]
-    
-    %% Final Report
-    Safe --> Print[Print Report]
-    Elevated --> Print
-    Danger --> Print
-    Abort --> Print
-    
-
 ## 🛠️ Repository Structure
 
 ```bash
-Origins-Model/
 ├── notebooks/
 │   ├── 01_Exploration_Data_Physics.ipynb   # b-value & energy feature extraction
 │   ├── 02_Training_Phase1_Standard.ipynb   # The failed baseline
