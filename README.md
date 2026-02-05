@@ -53,19 +53,3 @@ The model is tuned for **Safety-Critical Systems** (Nuclear Plants, High-Speed R
 * **Golden Threshold:** $M \ge 4.90$
 
 ---
-## 🛠️ Repository Structure
-
-```bash
-├── notebooks/
-│   ├── 01_Exploration_Data_Physics.ipynb   # b-value & energy feature extraction
-│   ├── 02_Training_Phase1_Standard.ipynb   # The failed baseline
-│   ├── 03_Training_Phase2_Nuclear.ipynb    # THE CORE MODEL (Start Here)
-│   └── 04_Analysis_Phase3_Ensemble.ipynb   # The failed XGBoost experiment
-├── production/
-│   ├── origins_nuclear_v1.pth              # Final Saved Weights
-│   ├── origins_scaler_v1.pkl               # Scikit-learn Scaler
-│   └── origins_config.pkl                  # Threshold Config (M4.90)
-├── inference/
-│   ├── oracle_live.py                      # Script to query USGS live feed
-│   └── server.py                           # FastAPI Microservice for Go Backend
-└── README.md
